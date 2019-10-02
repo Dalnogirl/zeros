@@ -1,63 +1,37 @@
-module.exports =
-function zeros(expression) {
-  let array = expression.match(/(\d+|\!+)/gm), result = [];
-  array
-  for (let i = 0; i < array.length; i++) {
+module.exports = function zeros(expression) {
+  let array = expression.match(/(\d+|\!+)/gm), k = 0, k2 = 0, a = 0, b = 0, startNum, imp;
 
-    if (array[i].includes('!')) {
-      i
-      k = array[i].length;
-      result.push(factorial(array[i - 1], k))
-    }
-    array
-  }
-  result
-
-
-  function factorial(num, k = 1) {
-    num
-    if (k !== 1 && +num % 2 === 1) {
-      return (num != 1) ? multiply(num, factorial(num - k, k)) : 1;
-    } else if (k !== 1 && +num % 2 === 0) {
-      return (num != 2) ? multiply(num, factorial(num - k, k)) : 2;
-    } else {
-      return (num != 1) ? num * factorial(num - k) : 1;
-    }
+  for (let i = 0; i < array.length - 1; i += 2) {
+      a += zer(array[i], array[i + 1])[0]
+      b += zer(array[i], array[i + 1])[1]
 
   }
 
-  function multiply(first, second) {
-    first
-    let arrOne = String(first).length === 1 ? String(first) : String(first).split('').reverse(),
-      arrTwo = String(second).length === 1 ? String(second) : String(second).split('').reverse(), result = [];
-    for (let i = 0; i < arrOne.length; i++) {
-      for (let k = 0; k < arrTwo.length; k++) {
-        let product = arrOne[i] * arrTwo[k];
-
-        if (result[i + k]) {
-          result[i + k] = result[i + k] + product;
-        } else {
-          result[i + k] = product;
-        }
+  function zer(n, danger) {
+      n = +n;
+      k = 0;
+      k2 = 0;
+      if (danger.length === 2) {
+          startNum = (n % 2 === 0) ? 2 : 1;
+          imp = 2;
+      } else {
+          startNum = 1;
+          imp = 1;
       }
-    }
 
-    for (let i = 0; i < result.length; i++) {
-      let lastNum = result[i] % 10;
-      let nextNum = Math.floor(result[i] / 10);
-      result[i] = lastNum;
-      if (result[i + 1]) { // NOT OUT OF RANGE!
-        result[i + 1] += nextNum;
-      } else if (nextNum != 0) {
-        result[i + 1] = nextNum;
+      for (let i = startNum; i <= n; i += imp) {
+
+          if (i % 5 === 0) {
+              k++
+              if (i % 25 === 0) {
+                  k ++;
+              }
+          }
+          if (i % 2 === 0) {
+              k2++;
+          }
       }
-    }
-
-    return result.reverse().join('');
+      return [k, k2];
   }
-  console.log(String(result.reduce((acc, item) => acc *= item)).match(/0+$/ig))
-  return String(result.reduce((acc, item) => acc = multiply(acc, item))).match(/0+$/ig) === null ? 0 :
-   String(result.reduce((acc, item) => acc = multiply(acc, item))).match(/0+$/ig)[0].length;
+  return Math.min(a, b);
 }
-
-//console.log(zeros('55!!*77!!*99!!'))
